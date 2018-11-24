@@ -2,7 +2,7 @@ package cn.scau.rvideo.server.auth;
 
 import cn.scau.rvideo.server.auth.service.JwtService;
 import cn.scau.rvideo.server.auth.annotation.Token;
-import cn.scau.rvideo.server.auth.entity.UserToken;
+import cn.scau.rvideo.server.auth.token.UserToken;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
-    @Resource(name = "jwtService")
+    @Resource
     private JwtService jwtService;
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 

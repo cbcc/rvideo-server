@@ -3,6 +3,8 @@ package cn.scau.rvideo.server.auth;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+
 @Component
 @ConfigurationProperties(
         prefix = "rvideo.auth"
@@ -10,16 +12,9 @@ import org.springframework.stereotype.Component;
 public class AuthProperties {
     private String headerName = "Authorization";
     private String tokenPrefix = "Bearer ";
-    private String tokenExpirationMinutes;
+    private final Token token = new Token();
 
-    public AuthProperties() {}
-
-    public String getTokenExpirationMinutes() {
-        return tokenExpirationMinutes;
-    }
-
-    public void setTokenExpirationMinutes(String tokenExpirationMinutes) {
-        this.tokenExpirationMinutes = tokenExpirationMinutes;
+    public AuthProperties() {
     }
 
     public String getHeaderName() {
@@ -36,5 +31,21 @@ public class AuthProperties {
 
     public void setTokenPrefix(String tokenPrefix) {
         this.tokenPrefix = tokenPrefix;
+    }
+
+    public Token getToken() {
+        return token;
+    }
+
+    public static class Token {
+        private Duration expiration = Duration.ofMinutes(60);
+
+        public Duration getExpiration() {
+            return expiration;
+        }
+
+        public void setExpiration(Duration expiration) {
+            this.expiration = expiration;
+        }
     }
 }

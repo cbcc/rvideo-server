@@ -1,4 +1,4 @@
-package cn.scau.rvideo.server.auth.entity;
+package cn.scau.rvideo.server.auth.token;
 
 import java.util.List;
 
