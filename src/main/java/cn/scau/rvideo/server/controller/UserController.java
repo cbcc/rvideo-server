@@ -8,7 +8,6 @@ import cn.scau.rvideo.server.entity.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/user/")
@@ -17,8 +16,6 @@ public class UserController {
 
     @Resource
     private UserService userService;
-    @Resource
-    private JwtService jwtService;
 
     @PostMapping("/register")
     public Response register(@RequestBody  User user){
@@ -28,20 +25,6 @@ public class UserController {
             response.setData(user).setCode(1).setMsg("注册成功");
         } else {
             response.setCode(-1).setMsg("注册失败");
-        }
-        return response;
-    }
-
-    @PostMapping("/login")
-    public Response login(@RequestBody User user, HttpServletResponse res){
-        user = userService.login(user.getEmail(), user.getPassword());
-        Response response = new Response();
-        if(user != null){
-            response.setData(user).setCode(1).setMsg("登录成功");
-            // 带上JWT
-            jwtService.addToken(user, res);
-        } else {
-            response.setCode(-1).setMsg("账号或密码错误");
         }
         return response;
     }
