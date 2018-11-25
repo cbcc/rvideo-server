@@ -6,7 +6,6 @@ import cn.scau.rvideo.server.auth.token.UserToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -18,15 +17,13 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("api/user/login")
-    public AuthResponse login(@RequestBody LoginParam loginParam, HttpServletResponse res){
+    public AuthResponse login(@RequestBody LoginParam loginParam){
         UserToken userToken = userTokenService.loadByEmailAndPassword(loginParam.getEmail(), loginParam.getPassword());
         AuthResponse authResponse = new AuthResponse();
         if(userToken != null){
-            authResponse.setStatus(1).setMessage("登录成功");
-            // 带上JWT
-            jwtService.addToken(userToken, res);
+            authResponse.setToken(jwtService.createToken(userToken)).setStatus(AuthResponse.SUCCESS).setMessage("登录成功");
         } else {
-            authResponse.setStatus(-1).setMessage("账号或密码错误");
+            authResponse.setStatus(AuthResponse.FAIL).setMessage("账号或密码错误");
         }
         return authResponse;
     }

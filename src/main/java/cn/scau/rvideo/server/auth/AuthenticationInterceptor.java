@@ -3,6 +3,7 @@ package cn.scau.rvideo.server.auth;
 import cn.scau.rvideo.server.auth.service.JwtService;
 import cn.scau.rvideo.server.auth.annotation.Token;
 import cn.scau.rvideo.server.auth.token.UserToken;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ import java.util.List;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Resource
+    private AuthProperties authProperties;
+    @Resource
     private JwtService jwtService;
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
@@ -33,27 +36,37 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         Method method = handlerMethod.getMethod();
 
         if (method.isAnnotationPresent(Token.class)) {
-            Token token = method.getAnnotation(Token.class);
-            if (token.required()) {
-                try {
-                    // 登录认证
-                    UserToken userToken = jwtService.verifyToken(request);
-                    logger.debug("{}", userToken);
-                    if (userToken == null) {
+            Token tokenAnnotation = method.getAnnotation(Token.class);
+            if (tokenAnnotation.required()) {
+                final String token = request.getHeader(authProperties.getHeaderName());
+                UserToken userToken;
+                // 登录认证
+                if (token != null && !"null".equals(token)) {
+                    try {
+                        userToken = jwtService.parseToken(token);
+                    } catch (ExpiredJwtException expiredJwtException) {
+                        logger.debug("{}",expiredJwtException);
+                        response.setStatus(AuthStatus.AUTH_EXPIRED);
+                        return false;
+                    } catch (JwtException jwtException) {
+                        logger.debug("{}", jwtException);
+                        response.setStatus(AuthStatus.AUTH_ILLEGAL);
                         return false;
                     }
-                    // 权限认证
-                    return verifyRoles(token.roles(), userToken.getRoles());
-                } catch (JwtException e) {
-                    logger.info("JwtException");
+                } else {
+                    response.setStatus(AuthStatus.AUTH_REQUIRED);
                     return false;
+                }
+                // 权限认证
+                if (userToken != null) {
+                    return verifyRoles(tokenAnnotation.roles(), userToken.getRoles(), response);
                 }
             }
         }
         return true;
     }
 
-    private boolean verifyRoles(String[] roles, List<String> userRoles) {
+    private boolean verifyRoles(String[] roles, List<String> userRoles, HttpServletResponse response) {
         for (String role: roles) {
             boolean hasRole = false;
             for (String userRole: userRoles) {
@@ -63,6 +76,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 }
             }
             if (!hasRole) {
+                response.setStatus(AuthStatus.AUTH_UNAUTHORIZED);
                 return false;
             }
         }
