@@ -11,6 +11,11 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 提供创建和解析JWT服务
+ *
+ * @author cbc
+ */
 @Service
 public class JwtService {
     @Resource
@@ -24,6 +29,7 @@ public class JwtService {
         // 设置JWT
         JwtBuilder builder = Jwts.builder().setId(userToken.getId().toString())
                 .setIssuedAt(now)
+                .claim("id", userToken.getId())
                 .claim("name", userToken.getName())
                 .claim("email", userToken.getEmail())
                 .claim("roles", userToken.getRoles())
