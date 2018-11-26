@@ -14,6 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationInterceptor.class);
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         // 如果不是映射到方法直接通过
         if(!(handler instanceof HandlerMethod)){
             return true;
@@ -45,28 +46,32 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     try {
                         userToken = jwtService.parseToken(token);
                     } catch (ExpiredJwtException expiredJwtException) {
-                        logger.debug("{}",expiredJwtException);
-                        response.setStatus(AuthStatus.AUTH_EXPIRED);
+                        logger.debug("凭证已过期: {}",token);
+                        sendError(response, AuthStatus.AUTH_EXPIRED, "过期凭证");
                         return false;
                     } catch (JwtException jwtException) {
-                        logger.debug("{}", jwtException);
-                        response.setStatus(AuthStatus.AUTH_ILLEGAL);
+                        logger.debug("不信任凭证: {}", token);
+                        sendError(response, AuthStatus.AUTH_ILLEGAL, "不信任凭证");
                         return false;
                     }
                 } else {
-                    response.setStatus(AuthStatus.AUTH_REQUIRED);
+                    logger.debug("需要认证");
+                    sendError(response, AuthStatus.AUTH_REQUIRED, "需要认证");
                     return false;
                 }
                 // 权限认证
                 if (userToken != null) {
-                    return verifyRoles(tokenAnnotation.roles(), userToken.getRoles(), response);
+                    if(!hasRoles(tokenAnnotation.roles(), userToken.getRoles())) {
+                        logger.debug("没有权限: {}", userToken);
+                        sendError(response,AuthStatus.AUTH_UNAUTHORIZED, "没有权限");
+                    }
                 }
             }
         }
         return true;
     }
 
-    private boolean verifyRoles(String[] roles, List<String> userRoles, HttpServletResponse response) {
+    private boolean hasRoles(String[] roles, List<String> userRoles) {
         for (String role: roles) {
             boolean hasRole = false;
             for (String userRole: userRoles) {
@@ -76,10 +81,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 }
             }
             if (!hasRole) {
-                response.setStatus(AuthStatus.AUTH_UNAUTHORIZED);
                 return false;
             }
         }
         return true;
+    }
+
+    private void sendError(HttpServletResponse response, int status, String message) throws IOException {
+        response.setHeader("Access-Control-Allow-Headers", "content-type");
+        response.setHeader("Access-Control-Allow-Origin","*");
+        response.sendError(status, message);
     }
 }
