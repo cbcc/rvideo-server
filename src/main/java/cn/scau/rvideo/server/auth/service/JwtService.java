@@ -48,6 +48,6 @@ public class JwtService {
         tokenUser.setName(claims.get("name", String.class));
         tokenUser.setEmail(claims.get("email", String.class));
         tokenUser.setRoles((List<String>) claims.get("roles", List.class));
-        return null;
+        return tokenUser;
     }
 }
