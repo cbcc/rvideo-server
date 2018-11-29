@@ -1,22 +1,24 @@
 package cn.scau.rvideo.server.dto;
 
 public class Response {
+    public static final int SUCCESS = 1;     // 成功
+    public static final int FAIL = -1;    // 失败
     private Object data;
-    private String msg;
-    private int code;
+    private String message;
+    private int status;
 
     public Response setData(Object data) {
         this.data = data;
         return this;
     }
 
-    public Response setMsg(String msg) {
-        this.msg = msg;
+    public Response setMessage(String message) {
+        this.message = message;
         return this;
     }
 
-    public Response setCode(int code) {
-        this.code = code;
+    public Response setStatus(int status) {
+        this.status = status;
         return this;
     }
 
@@ -24,20 +26,11 @@ public class Response {
         return data;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public int getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
-
-
-    /*    public static class ResponseBuilder {
-        Response response = new Response();
-        public ResponseBuilder setData(Object data){
-            response.setData(data);
-            return this;
-        }
-    }*/
 }
