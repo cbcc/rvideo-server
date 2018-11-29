@@ -25,14 +25,14 @@ public class UserMapperTest {
     }
 
     @Test
-    public void findByEmailAndPsw(){
-        User user =userMapper.findByEmailAndPsw("1@1","1");
+    public void findByEmailAndPsw() {
+        User user = userMapper.findByEmailAndPassword("1@1", "1");
         System.out.println(user);
     }
 
     @Test
     public void testChange() {
-        userMapper.changeName(1, "aa");
-        userMapper.changeSign(1, "haha");
+        userMapper.updateName(1, "aa");
+        userMapper.updateSign(1, "haha");
     }
 }

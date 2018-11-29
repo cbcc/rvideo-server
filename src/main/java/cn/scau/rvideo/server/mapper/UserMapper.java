@@ -23,26 +23,28 @@ public interface UserMapper {
     Integer update(User user);
 
     @Update("update user set name = #{name}, sign = #{sign}, sex = #{sex} where id = #{id}")
-    Integer updateCustomFields (@Param("id") Integer id, @Param("name") String name,
-                                @Param("sign") String sign, @Param("sex") Integer sex);
+    Integer updateCustomFields(@Param("id") Integer id, @Param("name") String name,
+                               @Param("sign") String sign, @Param("sex") Integer sex);
 
     @Select("select * from user " +
             "where email = #{email} and password = #{password}")
-    User findByEmailAndPsw(@Param("email") String email, @Param("password") String password);
+    User findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
 
     @Select("select * from user" +
             "where nickname like CONCAT('%',#{nickname},'%'")
     List<User> findLikeNickname(String nickname);
 
+    @Select("select * from user where email = #{email}")
     User findByEmail(@Param("email") String email);
 
     @Update("update user set name = #{name} where id = #{id}")
-    Integer changeName(@Param("id") Integer id, @Param("name") String name);
+    Integer updateName(@Param("id") Integer id, @Param("name") String name);
+
+    @Update("update user set face = #{face} where id = #{id}")
+    Integer updateFace(@Param("id") Integer id, @Param("face") String face);
+
     @Update("update user set sign = #{sign} where id = #{id}")
-    Integer changeSign(@Param("id") Integer id, @Param("sign") String sign);
+    Integer updateSign(@Param("id") Integer id, @Param("sign") String sign);
 
-    Integer changePassword(@Param("id") Integer id, @Param("password") String password);
-    Integer changeHead(@Param("id") Integer id, @Param("head") String head);
-
-    
+    Integer updatePassword(@Param("id") Integer id, @Param("password") String password);
 }

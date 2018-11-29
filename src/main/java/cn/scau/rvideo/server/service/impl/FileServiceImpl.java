@@ -36,8 +36,9 @@ public class FileServiceImpl implements FileService<FileServiceImpl.FileType> {
     }
 
     /**
-     * 保存文件
-     * @return 保存的文件全路径(失败为null)
+     * 保存文件并返回相对于 ResourceProperties.path 的路径
+     *
+     * @return 保存的文件相对路径(失败为null)
      */
     @Override
     public String save(MultipartFile file, FileType fileType) {
@@ -57,11 +58,12 @@ public class FileServiceImpl implements FileService<FileServiceImpl.FileType> {
             return null;
         }
         logger.debug("文件保存成功: {}", saveFile);
-        return savePath;
+        return savePath.replace(resourceProperties.getPath() + "/", "");
     }
 
     /**
      * 根据 MultipartFile 的内容类型和 FileType 构造保存文件的全路径
+     *
      * @return 保存的文件全路径
      */
     private String createSavePath(MultipartFile file, FileType fileType) {
@@ -70,7 +72,7 @@ public class FileServiceImpl implements FileService<FileServiceImpl.FileType> {
         if (contentType != null) {
             saveType = contentType.split("/")[1];
         }
-        String fileName = UUID.randomUUID().toString().replace("-","");
+        String fileName = UUID.randomUUID().toString().replace("-", "");
         StringBuilder savePath = new StringBuilder(resourceProperties.getPath());
         switch (fileType) {
             case USER_FACE:

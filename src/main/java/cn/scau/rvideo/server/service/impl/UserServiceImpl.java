@@ -15,12 +15,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(User user) {
-        try{
-            if(userMapper.save(user) == 1) {
+        try {
+            if (userMapper.save(user) == 1) {
                 return user;
             }
             return null;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
@@ -28,9 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String email, String password) {
-        try{
-            return userMapper.findByEmailAndPsw(email, password);
-        } catch (Exception ex){
+        try {
+            return userMapper.findByEmailAndPassword(email, password);
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
@@ -38,21 +38,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getDetail(Integer id) {
-        try{
+        try {
             return userMapper.get(id);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return null;
         }
     }
 
     @Override
-    public Integer updateCustomFields (Integer id, String name, String sign, Integer sex) {
-        try{
+    public Integer updateCustomFields(Integer id, String name, String sign, Integer sex) {
+        try {
             return userMapper.updateCustomFields(id, name, sign, sex);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
-            return null;
+            return 0;
+        }
+    }
+
+    @Override
+    public Integer updateFace(Integer id, String face) {
+        try {
+            return userMapper.updateFace(id, face);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return 0;
         }
     }
 }
