@@ -10,8 +10,9 @@ import java.util.List;
 @Component(value = "VideoMapper")
 public interface VideoMapper {
 
-    @Insert("insert into video(user_id,name,tag,thumbnail,file,introduction)" +
-            "value (#{userId},#{name},#{tag},#{thumbnail},#{file},#{introduction})")
+    @Options(useGeneratedKeys = true)
+    @Insert("insert into video(user_id,name,tag,face,file,introduction)" +
+            "value (#{userId},#{name},#{tag},#{face},#{file},#{introduction})")
     Integer save(Video video);
 
     @Delete("delete from video where id = #{id}")
@@ -29,12 +30,9 @@ public interface VideoMapper {
     @Select("select * from video where tag = #{tag}")
     List<Video> findByTag(String tag);
 
-    Integer changeLikes(@Param("id") Integer id, @Param("likes") Integer likes);
-    Integer changeViews(@Param("id") Integer id, @Param("views") Integer views);
+    @Update("update video set likes = #{likes} where id = #{id}")
+    Integer updateLikes(@Param("id") Integer id, @Param("likes") Integer likes);
 
-/*    VideoInfo findVideoInfoById(Integer id);
-    List<VideoInfo> findVideoInfoLikeName(String name);
-    List<VideoInfo> findVideoInfoByTag(String tag);
-    List<VideoInfo> findVideoInfoByTagLimit(@Param("tag") String tag, @Param("count") Integer count);*/
-
+    @Update("update video set sign = #{views} where id = #{id}")
+    Integer updateViews(@Param("id") Integer id, @Param("views") Integer views);
 }
