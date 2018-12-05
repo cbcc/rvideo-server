@@ -1,5 +1,7 @@
 package cn.scau.rvideo.server.controller;
 
+import cn.scau.rvideo.server.controller.validation.group.Register;
+import cn.scau.rvideo.server.controller.validation.group.UpdateCustomFields;
 import cn.scau.rvideo.server.dto.Response;
 import cn.scau.rvideo.server.dto.Status;
 import cn.scau.rvideo.server.service.FileService;
@@ -7,6 +9,7 @@ import cn.scau.rvideo.server.service.UserService;
 import cn.scau.rvideo.server.auth.annotation.Token;
 import cn.scau.rvideo.server.entity.User;
 import cn.scau.rvideo.server.service.impl.FileServiceImpl;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,13 +26,13 @@ public class UserController {
     private FileService<FileServiceImpl.FileType> fileService;
 
     @PostMapping("/register")
-    public Response register(@RequestBody User user) {
+    public Response register(@RequestBody @Validated(value = {Register.class}) User user) {
         Response response = new Response();
         if (userService.isEmailExisted(user.getEmail())) {
             return response.setStatus(Status.FAIL).setMessage("该邮箱已被注册");
         }
         if (user.getSex() == null) {
-            user.setSex("1");
+            user.setSex(1);
         }
         user.setRoles("USER");
         user = userService.register(user);
@@ -56,9 +59,9 @@ public class UserController {
 
     @Token(roles = {"USER"})
     @PutMapping("/{id}")
-    public Response updateCustomFields(@PathVariable Integer id, @RequestBody User user) {
+    public Response updateCustomFields(@PathVariable Integer id, @RequestBody @Validated(value = {UpdateCustomFields.class}) User user) {
         Response response = new Response();
-        if (userService.updateCustomFields(id, user.getName(), user.getSign(), Integer.parseInt(user.getSex())) > 0) {
+        if (userService.updateCustomFields(id, user.getName(), user.getSign(), user.getSex()) > 0) {
             response.setStatus(Status.SUCCESS).setMessage("更新成功");
         } else {
             response.setStatus(Status.FAIL).setMessage("更新失败");

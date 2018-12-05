@@ -20,7 +20,7 @@ public class UserMapperTest {
         user.setName("dddaaaa");
         user.setPassword("123456");
         user.setEmail("3@1");
-        user.setSex("1");
+        user.setSex(1);
         System.out.println(userMapper.save(user));
     }
 

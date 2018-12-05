@@ -47,6 +47,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isEmailExisted(String email) {
+        User user = userMapper.findByEmail(email);
+        return user != null;
+    }
+
+    @Override
     public Integer updateCustomFields(Integer id, String name, String sign, Integer sex) {
         try {
             return userMapper.updateCustomFields(id, name, sign, sex);

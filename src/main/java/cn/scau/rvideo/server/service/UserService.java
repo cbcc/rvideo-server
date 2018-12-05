@@ -14,6 +14,8 @@ public interface UserService {
     @Nullable
     User getDetail(Integer id);
 
+    boolean isEmailExisted(String email);
+
     Integer updateCustomFields(Integer id, String name, String sign, Integer sex);
 
     Integer updateFace(Integer id, String face);
