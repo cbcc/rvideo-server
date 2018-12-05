@@ -1,9 +1,6 @@
 package cn.scau.rvideo.server.auth.controller;
 
 public class AuthResponse {
-    public static final int SUCCESS = 1;     // 成功
-    public static final int FAIL = -1;    // 失败
-
     private String token;
     private int status;
     private String message;

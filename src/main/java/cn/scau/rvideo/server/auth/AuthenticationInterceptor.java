@@ -33,6 +33,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if(!(handler instanceof HandlerMethod)){
             return true;
         }
+        response.setHeader("Access-Control-Allow-Headers", "content-type");
+        response.setHeader("Access-Control-Allow-Origin","*");
         HandlerMethod handlerMethod = (HandlerMethod)handler;
         Method method = handlerMethod.getMethod();
 
@@ -47,23 +49,23 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                         userToken = jwtService.parseToken(token);
                     } catch (ExpiredJwtException expiredJwtException) {
                         logger.debug("凭证已过期: {}",token);
-                        sendError(response, AuthStatus.AUTH_EXPIRED, "过期凭证");
+                        response.sendError(AuthStatus.AUTH_EXPIRED, "过期凭证");
                         return false;
                     } catch (JwtException jwtException) {
                         logger.debug("不信任凭证: {}", token);
-                        sendError(response, AuthStatus.AUTH_ILLEGAL, "不信任凭证");
+                        response.sendError(AuthStatus.AUTH_ILLEGAL, "不信任凭证");
                         return false;
                     }
                 } else {
                     logger.debug("需要认证");
-                    sendError(response, AuthStatus.AUTH_REQUIRED, "需要认证");
+                    response.sendError(AuthStatus.AUTH_REQUIRED, "需要认证");
                     return false;
                 }
                 // 权限认证
                 if (userToken != null) {
                     if(!hasRoles(tokenAnnotation.roles(), userToken.getRoles())) {
                         logger.debug("没有权限: {}", userToken);
-                        sendError(response,AuthStatus.AUTH_UNAUTHORIZED, "没有权限");
+                        response.sendError(AuthStatus.AUTH_UNAUTHORIZED, "没有权限");
                     }
                 }
             }
@@ -85,11 +87,5 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             }
         }
         return true;
-    }
-
-    private void sendError(HttpServletResponse response, int status, String message) throws IOException {
-        response.setHeader("Access-Control-Allow-Headers", "content-type");
-        response.setHeader("Access-Control-Allow-Origin","*");
-        response.sendError(status, message);
     }
 }
