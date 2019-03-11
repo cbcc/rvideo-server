@@ -6,7 +6,7 @@ CREATE TABLE `barrage` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int unsigned NOT NULL,
   `video_id` int unsigned NOT NULL,
-  `content` varchar(50) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -37,15 +37,15 @@ CREATE TABLE `friend` (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `password` varchar(20) NOT NULL,
-  `email` varchar(50) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
   `sex` tinyint unsigned NOT NULL,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `sign` varchar(255) DEFAULT NULL,
   `face` varchar(255) DEFAULT NULL,
   `roles` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`,`email`),
-  UNIQUE KEY `name` (`name`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -58,7 +58,7 @@ CREATE TABLE `video` (
   `name` varchar(255) NOT NULL,
   `likes` int unsigned DEFAULT '0',
   `views` int unsigned DEFAULT '0',
-  `tag` varchar(100) DEFAULT NULL,
+  `tag` varchar(255) DEFAULT NULL,
   `face` varchar(255) DEFAULT NULL,
   `file` varchar(255) DEFAULT NULL,
   `introduction` varchar(255) DEFAULT NULL,

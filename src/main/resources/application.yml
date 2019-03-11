@@ -1,23 +1,22 @@
 spring:
   datasource:
-    #数据源基本配置
+    # 数据源基本配置
     username: root
     password: 8897710
     url: jdbc:mysql://127.0.0.1:3306/rvideo?serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
-    #数据源其他配置
-
-    #配置初始化大小、最小、最大
+    # 数据源其他配置
+    # 配置初始化大小、最小、最大
     initialSize: 5
     minIdle: 5
     maxActive: 20
-    #配置获取连接等待超时的时间
+    # 配置获取连接等待超时的时间
     maxWait: 60000
-    #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
     timeBetweenEvictionRunsMillis: 60000
-    #配置一个连接在池中最小生存的时间，单位是毫秒
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
     minEvictableIdleTimeMillis: 300000
 
     validationQuery: SELECT 1 FROM DUAL
@@ -25,7 +24,7 @@ spring:
     testOnBorrow: false
     testOnReturn: false
     poolPreparedStatements: true
-    #配置监控统计拦截的filters，去掉后监控界面sql无法统计，“wall”用于防火墙
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，“wall”用于防火墙
     filters: stat,wall
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
@@ -37,9 +36,3 @@ mybatis:
 
 logging:
   path: log
-
-    #schema:
-    #  - classpath:sql/department.sql
-    #  - classpath:sql/employee.sql
-    #设置了schema 才能生效
-    #initialization-mode: always

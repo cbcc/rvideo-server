@@ -1,17 +1,34 @@
 package cn.scau.rvideo.server.entity;
 
+import cn.scau.rvideo.server.controller.validation.group.Submit;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 
 public class Video {
 
     private Integer id;
     private Integer userId;
+
+    @NotNull(message = "标题不能为空", groups = {Submit.class})
+    @Size(min = 1, max = 80, message = "标题长度[1-80]", groups = {Submit.class})
     private String name;        //视频名称
+
     private Integer likes;      //点赞
     private Integer views;      //播放量
+
+    @NotNull(message = "标签不能为空", groups = {Submit.class})
     private String tag;         //标签
+
+    @NotNull(message = "视频封面不能为空", groups = {Submit.class})
     private String face;    //缩略图名
+
+    @NotNull(message = "视频不能为空", groups = {Submit.class})
     private String file;        //文件位置
+
+    @NotNull(message = "简介不能为空", groups = {Submit.class})
+    @Size(min = 1, max = 250, message = "简介长度[1-250]", groups = {Submit.class})
     private String introduction;    //视频介绍
     private Timestamp date;
 

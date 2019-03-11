@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/api/user/")
+@RequestMapping("/api/user")
 @CrossOrigin
 public class UserController {
 
@@ -70,12 +70,12 @@ public class UserController {
     }
 
     @Token(roles = {"USER"})
-    @PutMapping("{id}/face")
+    @PutMapping("/{id}/face")
     public Response updateFace(@PathVariable Integer id, @RequestParam("file") MultipartFile file) {
         String path = fileService.save(file, FileServiceImpl.FileType.USER_FACE);
         Response response = new Response();
         if (path != null && userService.updateFace(id, path) > 0) {
-            response.setData("1").setStatus(Status.SUCCESS).setMessage("更新成功");
+            response.setStatus(Status.SUCCESS).setMessage("更新成功");
         } else {
             response.setStatus(Status.FAIL).setMessage("更新失败");
         }
