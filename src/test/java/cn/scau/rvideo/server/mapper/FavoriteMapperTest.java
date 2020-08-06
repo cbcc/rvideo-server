@@ -29,7 +29,7 @@ public class FavoriteMapperTest {
         Favorite favorite = new Favorite();
         favorite.setUserId(1);
         favorite.setVideoId(1);
-        favorite = favoriteMapper.get(favorite);
+        favorite = favoriteMapper.get(1, 1);
         assert favorite != null;
         System.out.println(favorite);
     }
@@ -45,6 +45,6 @@ public class FavoriteMapperTest {
         Favorite favorite = new Favorite();
         favorite.setUserId(1);
         favorite.setVideoId(1);
-        assert favoriteMapper.delete(favorite) > 0;
+        assert favoriteMapper.delete(1, 1) > 0;
     }
 }

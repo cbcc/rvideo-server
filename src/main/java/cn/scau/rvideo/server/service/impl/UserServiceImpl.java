@@ -6,6 +6,7 @@ import cn.scau.rvideo.server.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,6 +35,16 @@ public class UserServiceImpl implements UserService {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userMapper.getAll();
+    }
+
+    @Override
+    public Integer delete(Integer id) {
+        return userMapper.delete(id);
     }
 
     @Override
@@ -71,4 +82,10 @@ public class UserServiceImpl implements UserService {
             return 0;
         }
     }
+
+    @Override
+    public List<User> findLikeName(String name) {
+        return userMapper.findLikeName(name);
+    }
+
 }

@@ -21,6 +21,9 @@ public interface UserMapper {
     @Select("select * from user")
     List<User> getAll();
 
+    @Delete("delete from user where id = #{id}")
+    Integer delete(Integer id);
+
     Integer update(User user);
 
     @Update("update user set name = #{name}, sign = #{sign}, sex = #{sex} where id = #{id}")
@@ -31,9 +34,9 @@ public interface UserMapper {
             "where email = #{email} and password = #{password}")
     User findByEmailAndPassword(@Param("email") String email, @Param("password") String password);
 
-    @Select("select * from user" +
-            "where nickname like CONCAT('%',#{nickname},'%'")
-    List<User> findLikeNickname(String nickname);
+    @Select("select * from user " +
+            "where name like CONCAT('%',#{name},'%')")
+    List<User> findLikeName(String name);
 
     @Select("select * from user where email = #{email}")
     User findByEmail(@Param("email") String email);

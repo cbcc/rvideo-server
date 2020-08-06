@@ -5,10 +5,10 @@ import java.sql.Timestamp;
 public class Barrage {
 
     private Integer id;
-    private  Integer userId;
-    private  Integer videoId;
-    private  String content;        //内容
-    private Timestamp date;         //时间
+    private Integer userId;
+    private Integer videoId;
+    private String content;// 内容
+    private Timestamp date;// 时间
 
     public Integer getId() {
         return id;

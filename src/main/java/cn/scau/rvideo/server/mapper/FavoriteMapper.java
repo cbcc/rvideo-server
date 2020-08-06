@@ -1,10 +1,7 @@
 package cn.scau.rvideo.server.mapper;
 
 import cn.scau.rvideo.server.entity.Favorite;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,10 +15,10 @@ public interface FavoriteMapper {
 
     @Select("select user_id, video_id from favorite " +
             "where user_id = #{userId} and video_id = #{videoId}")
-    Favorite get(Favorite favorite);
+    Favorite get(@Param("userId") Integer userId, @Param("videoId") Integer videoId);
 
     @Delete("delete from favorite where user_id = #{userId} and video_id = #{videoId}")
-    Integer delete(Favorite favorite);
+    Integer delete(@Param("userId") Integer userId, @Param("videoId") Integer videoId);
 
     @Select("select video_id from favorite where user_id = #{userId}")
     List<Integer> findVideoIdByUserId(Integer userId);
