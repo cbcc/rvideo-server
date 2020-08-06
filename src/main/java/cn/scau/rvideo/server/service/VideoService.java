@@ -15,13 +15,21 @@ public interface VideoService {
     @Nullable
     Video get(Integer id);
 
+    List<Video> getAll();
+
+    List<Video> getIn(List<Integer> idList);
+
     List<Video> findByUserId(Integer userId);
 
     List<Video> findLikeName(String name);
 
     List<Video> findByTag(String tag);
 
+    List<Video> findByVerify(Integer verify);
+
     Integer updateLikes(Integer id, Integer likes);
 
     Integer updateViews(Integer id, Integer views);
+
+    Integer updateVerify(Integer id, Integer verify);
 }

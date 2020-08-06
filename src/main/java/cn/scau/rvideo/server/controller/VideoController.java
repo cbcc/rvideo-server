@@ -77,6 +77,66 @@ public class VideoController {
         return response;
     }
 
+    @Token(roles = {"ADMIN"})
+    @GetMapping("/videos/all")
+    public Response getAll() {
+        Response response = new Response();
+        List<Video> videos = videoService.getAll();
+        response.setData(videos).setStatus(Status.SUCCESS).setMessage("查找所有成功");
+        return response;
+    }
+
+    @Token(roles = {"ADMIN"})
+    @DeleteMapping("/video/{id}")
+    public Response delete(@PathVariable Integer id) {
+        Response response = new Response();
+        Integer result = videoService.delete(id);
+        if (result > 0) {
+            response.setStatus(Status.SUCCESS).setMessage("删除成功");
+        } else {
+            response.setStatus(Status.FAIL).setMessage("删除失败");
+        }
+        return response;
+    }
+
+    @Token(roles = {"USER", "ADMIN"})
+    @PutMapping("/video/{id}/likes")
+    public Response updateLikes(@PathVariable Integer id, @RequestBody Video video) {
+        Response response = new Response();
+        Integer result = videoService.updateLikes(id, video.getLikes());
+        if (result > 0) {
+            response.setStatus(Status.SUCCESS).setMessage("点赞量更新成功");
+        } else {
+            response.setStatus(Status.FAIL).setMessage("跟新失败");
+        }
+        return response;
+    }
+
+    @PutMapping("/video/{id}/views")
+    public Response updateViews(@PathVariable Integer id, @RequestBody Video video) {
+        Response response = new Response();
+        Integer result = videoService.updateViews(id, video.getViews());
+        if (result > 0) {
+            response.setStatus(Status.SUCCESS).setMessage("观看量更新成功");
+        } else {
+            response.setStatus(Status.FAIL).setMessage("更新失败");
+        }
+        return response;
+    }
+
+    @Token(roles = {"ADMIN"})
+    @PutMapping("/video/{id}/verify")
+    public Response updateVerify(@PathVariable Integer id, @RequestBody Video video) {
+        Response response = new Response();
+        Integer result = videoService.updateVerify(id, video.getVerify());
+        if (result > 0) {
+            response.setStatus(Status.SUCCESS).setMessage("审批更新成功");
+        } else {
+            response.setStatus(Status.FAIL).setMessage("更新失败");
+        }
+        return response;
+    }
+
     @GetMapping("/videos")
     public Response find(@RequestParam(name = "user-id", required = false) Integer userId, @RequestParam(required = false) String name) {
         Response response = new Response();
@@ -93,10 +153,18 @@ public class VideoController {
         return response;
     }
 
-    @GetMapping("/videos/{tag}")
+    @GetMapping("/videos/tag/{tag}")
     public Response findByTag(@PathVariable String tag) {
         Response response = new Response();
         List<Video> videos = videoService.findByTag(tag);
+        response.setData(videos).setStatus(Status.SUCCESS).setMessage("查找成功");
+        return response;
+    }
+
+    @GetMapping("/videos/verify/{verify}")
+    public Response findByVerify(@PathVariable Integer verify) {
+        Response response = new Response();
+        List<Video> videos = videoService.findByVerify(verify);
         response.setData(videos).setStatus(Status.SUCCESS).setMessage("查找成功");
         return response;
     }

@@ -13,23 +13,24 @@ public class Video {
 
     @NotNull(message = "标题不能为空", groups = {Submit.class})
     @Size(min = 1, max = 80, message = "标题长度[1-80]", groups = {Submit.class})
-    private String name;        //视频名称
+    private String name;// 视频名称
 
-    private Integer likes;      //点赞
-    private Integer views;      //播放量
+    private Integer likes;// 点赞
+    private Integer views;// 播放量
 
     @NotNull(message = "标签不能为空", groups = {Submit.class})
-    private String tag;         //标签
+    private String tag;// 标签
 
     @NotNull(message = "视频封面不能为空", groups = {Submit.class})
-    private String face;    //缩略图名
+    private String face;// 缩略图名
 
     @NotNull(message = "视频不能为空", groups = {Submit.class})
-    private String file;        //文件位置
+    private String file;// 文件位置
 
     @NotNull(message = "简介不能为空", groups = {Submit.class})
     @Size(min = 1, max = 250, message = "简介长度[1-250]", groups = {Submit.class})
-    private String introduction;    //视频介绍
+    private String introduction;// 视频介绍
+    private Integer verify;// 审核
     private Timestamp date;
 
     public Integer getId() {
@@ -104,6 +105,14 @@ public class Video {
         this.introduction = introduction;
     }
 
+    public Integer getVerify() {
+        return verify;
+    }
+
+    public void setVerify(Integer verify) {
+        this.verify = verify;
+    }
+
     public Timestamp getDate() {
         return date;
     }
@@ -124,6 +133,7 @@ public class Video {
                 ", face='" + face + '\'' +
                 ", file='" + file + '\'' +
                 ", introduction='" + introduction + '\'' +
+                ", verify=" + verify +
                 ", date=" + date +
                 '}';
     }

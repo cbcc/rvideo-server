@@ -63,7 +63,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 }
                 // 权限认证
                 if (userToken != null) {
-                    if(!hasRoles(tokenAnnotation.roles(), userToken.getRoles())) {
+                    if(!hasAnyRole(tokenAnnotation.roles(), userToken.getRoles())) {
                         logger.debug("没有权限: {}", userToken);
                         response.sendError(AuthStatus.AUTH_UNAUTHORIZED, "没有权限");
                     }
@@ -73,7 +73,18 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         return true;
     }
 
-    private boolean hasRoles(String[] roles, List<String> userRoles) {
+    private boolean hasAnyRole(String[] roles, List<String> userRoles) {
+        for (String role: roles) {
+            for (String userRole: userRoles) {
+                if (role.equals(userRole)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasAllRoles(String[] roles, List<String> userRoles) {
         for (String role: roles) {
             boolean hasRole = false;
             for (String userRole: userRoles) {

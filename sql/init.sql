@@ -62,6 +62,7 @@ CREATE TABLE `video` (
   `face` varchar(255) DEFAULT NULL,
   `file` varchar(255) DEFAULT NULL,
   `introduction` varchar(255) DEFAULT NULL,
+  `verify` tinyint unsigned DEFAULT '0',
   `date` timestamp(1) NOT NULL DEFAULT CURRENT_TIMESTAMP(1),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
