@@ -33,8 +33,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if(!(handler instanceof HandlerMethod)){
             return true;
         }
-        response.setHeader("Access-Control-Allow-Headers", "content-type");
-        response.setHeader("Access-Control-Allow-Origin","*");
         HandlerMethod handlerMethod = (HandlerMethod)handler;
         Method method = handlerMethod.getMethod();
 

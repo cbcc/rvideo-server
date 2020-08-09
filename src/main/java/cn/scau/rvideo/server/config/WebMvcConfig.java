@@ -22,7 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         logger.info("资源路径: " + resourceProperties.getPath());
-        registry.addResourceHandler("/rvideo/resource/**").addResourceLocations("file:" + resourceProperties.getPath() + "/");
+        registry.addResourceHandler("/resource/**").addResourceLocations("file:" + resourceProperties.getPath() + "/");
     }
 
     @Bean
