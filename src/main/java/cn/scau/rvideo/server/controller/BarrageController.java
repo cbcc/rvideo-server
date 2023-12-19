@@ -2,7 +2,6 @@ package cn.scau.rvideo.server.controller;
 
 import cn.scau.rvideo.server.auth.annotation.Token;
 import cn.scau.rvideo.server.dto.Response;
-import cn.scau.rvideo.server.dto.Status;
 import cn.scau.rvideo.server.entity.Barrage;
 import cn.scau.rvideo.server.service.BarrageService;
 import org.springframework.web.bind.annotation.*;
@@ -19,22 +18,18 @@ public class BarrageController {
 
     @Token(roles = {"USER"})
     @PostMapping("/barrage")
-    public Response save(@RequestBody Barrage barrage) {
-        Response response = new Response();
+    public Response<Void> save(@RequestBody Barrage barrage) {
         Integer result = barrageService.save(barrage);
         if (result == 1) {
-            response.setStatus(Status.SUCCESS).setMessage("评论成功");
+            return Response.success("评论成功");
         } else {
-            response.setStatus(Status.FAIL).setMessage("评论失败");
+            return Response.fail("评论失败");
         }
-        return response;
     }
 
     @GetMapping("/barrages/{videoId}")
-    public Response findByVideoId(@PathVariable Integer videoId) {
-        Response response = new Response();
+    public Response<List<Barrage>> findByVideoId(@PathVariable Integer videoId) {
         List<Barrage> barrageList = barrageService.findByVideoId(videoId);
-        response.setData(barrageList).setStatus(Status.SUCCESS).setMessage("查找成功");
-        return response;
+        return Response.success(barrageList, "查找成功");
     }
 }

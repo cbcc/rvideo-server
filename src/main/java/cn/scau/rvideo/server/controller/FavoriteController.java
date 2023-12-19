@@ -23,46 +23,40 @@ public class FavoriteController {
 
     @Token(roles = {"USER"})
     @PostMapping("/favorite")
-    public Response save(@RequestBody Favorite favorite) {
-        Response response = new Response();
+    public Response<Void> save(@RequestBody Favorite favorite) {
         Integer result = favoriteService.save(favorite);
         if (result == 1) {
-            response.setStatus(Status.SUCCESS).setMessage("收藏成功");
+            return Response.success("收藏成功");
         } else {
-            response.setStatus(Status.FAIL).setMessage("收藏失败");
+            return Response.fail("收藏失败");
         }
-        return response;
     }
 
     @Token(roles = {"USER"})
     @GetMapping("/favorite/{userId}/{videoId}")
-    public Response get(@PathVariable Integer userId, @PathVariable Integer videoId) {
-        Response response = new Response();
+    public Response<Void> get(@PathVariable Integer userId, @PathVariable Integer videoId) {
         Favorite result = favoriteService.get(userId, videoId);
         if (result != null) {
-            response.setStatus(Status.SUCCESS).setMessage("获取成功");
+            return Response.success("获取成功");
         } else {
-            response.setStatus(Status.FAIL).setMessage("获取失败");
+            return Response.fail("获取失败");
         }
-        return response;
     }
 
     @Token(roles = {"USER"})
     @DeleteMapping("/favorite/{userId}/{videoId}")
-    public Response delete(@PathVariable Integer userId, @PathVariable Integer videoId) {
-        Response response = new Response();
+    public Response<Void> delete(@PathVariable Integer userId, @PathVariable Integer videoId) {
         Integer result = favoriteService.delete(userId, videoId);
         if (result == 1) {
-            response.setStatus(Status.SUCCESS).setMessage("取消成功");
+            return Response.success("取消成功");
         } else {
-            response.setStatus(Status.FAIL).setMessage("取消失败");
+            return Response.fail("取消失败");
         }
-        return response;
     }
 
     @GetMapping("/favorites/{userId}")
-    public Response findVideoByUserId(@PathVariable Integer userId) {
-        Response response = new Response();
+    public Response<List<Video>> findVideoByUserId(@PathVariable Integer userId) {
+        Response<List<Video>> response = new Response<>();
         List<Integer> videoIdList = favoriteService.findVideoIdByUserId(userId);
         if (!videoIdList.isEmpty()) {
             List<Video> videoList = videoService.getIn(videoIdList);

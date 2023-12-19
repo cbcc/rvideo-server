@@ -15,14 +15,14 @@ public class ValidationExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public Response handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public Response<Void> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         List<ObjectError> list = ex.getBindingResult().getAllErrors();
         StringBuilder message = new StringBuilder("参数错误: ");
         for (ObjectError objectError : list) {
             message.append(objectError.getDefaultMessage());
             message.append("; ");
         }
-        Response response = new Response();
+        Response<Void> response = new Response<>();
         response.setStatus(Status.ARGUMENT_NOT_VALID);
         response.setMessage(message.toString());
         return response;
